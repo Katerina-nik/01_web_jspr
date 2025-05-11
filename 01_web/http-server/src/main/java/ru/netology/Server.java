@@ -62,7 +62,14 @@ public class Server {
     }
 
     private void handling(String[] parts, BufferedOutputStream out) {
-        final var path = parts[1];
+        final var pathAndQuery = parts[1];
+        System.out.println("Параметры");
+        var parsResultParams = Request.getQueryParams(pathAndQuery);
+        var path = Request.getQueryParamsPath(pathAndQuery);
+        System.out.println(parsResultParams);
+        System.out.println(path);
+
+        //final var path = parts[1];
         final var filePath = Path.of(".", "public", path);
         String mimeType = null;
         try {
@@ -70,6 +77,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try {
             if (parts.length != 3 || !this.validPaths.contains(path)) {
                 out.write((
